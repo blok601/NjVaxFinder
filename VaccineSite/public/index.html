@@ -1,0 +1,338 @@
+<html>
+<head>
+    <title>NJ Vax Finder</title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="REDACTED"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-L2EY9FSD7N');
+    </script>
+    <!--    Required headers for bootstrap-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--Bootstrap CSS and Theme-->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style type="text/css">
+        body {
+            margin-top: 20px;
+            background: whitesmoke;
+            font-family: Tahoma, sans-serif;
+        }
+
+        /*.tooltip .tooltext {*/
+        /*    visibility: hidden;*/
+        /*    width: 100px;*/
+        /*    background-color: black;*/
+        /*    color: #ffffff;*/
+        /*    text-align: center;*/
+        /*    border-radius: 3px;*/
+        /*    padding: 3px 0;*/
+
+        /*    !* Position the tooltip *!*/
+        /*    position: absolute;*/
+        /*    z-index: 1;*/
+        /*}*/
+
+        /*.tooltip:hover .tooltext {*/
+        /*    visibility: visible;*/
+        /*}*/
+        #mapDiv {
+            height: 400px;
+            /* The height is 400 pixels */
+            width: 100%;
+            /* The width is the width of the web page */
+        }
+    </style>
+    <!--JavaScript -->
+    <!-- jQuery first for ajax, then Popper.js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="js/backend.js"></script>
+    <script>
+        fetch();
+    </script>
+
+</head>
+
+<body bgcolor="#5f9ea0">
+<br>
+<div class="container">
+    <a href="https://www.cdc.gov/" target="_blank"><img src="http://www.njvaxfinder.com:80/images/banner.png"
+                                                        alt="banner" style="width: 1000px; height: 200px"
+                                                        class="rounded mx-auto d-block"></a>
+</div>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="mb-4">
+                <div class="small mb-3">Search</div>
+                <span>
+                    <div class="input-group">
+                        <select id='dropdown'>
+                                                    <option value=5>Within 5 miles</option>
+                                                    <option value=10 selected>Within 10 miles</option>
+                                                    <option value=25>Within 25 miles</option>
+                                                </select>
+                        <input placeholder="Enter zip code..." type="text" class="form-control" id='searchForm'
+                               style="border: solid">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" onclick="loadTable()" id='searchButton'><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                </div>
+                </span>
+            </div>
+            <div class="mb-4">
+                <!--                <div class="small mb-3">Overview</div>-->
+                <ul class="nav flex-column nav-pills">
+                    <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-fw fa-line-chart mr-2"></i>Overview</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="mb-4">
+                <div class="small mb-3"><strong>NJ COVID-19 Vaccine Statistics</strong></div>
+                <ul class="nav flex-column nav-pills">
+                    <li class="nav-item"><a href="#" class="d-flex nav-link"><i
+                            class="fa fa-fw fa-arrow-right align-self-center mr-2"></i>Doses Distributed<span
+                            id='DosesD'
+                            class="ml-auto align-self-center badge badge-secondary badge-pill">100</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link"><i
+                            class="fa fa-fw fa-arrow-right align-self-center mr-2"></i>Doses Administered<span
+                            class="ml-auto align-self-center badge badge-secondary badge-pill" id='DosesA'>4</span></a>
+                    </li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link"><i
+                            class="fa fa-fw fa-arrow-right align-self-center mr-2"></i>First Dose Received<span
+                            class="ml-auto align-self-center badge badge-secondary badge-pill" id='FDR'>78%</span></a>
+                    </li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link"><i
+                            class="fa fa-fw fa-arrow-right align-self-center mr-2"></i>Second Dose Received<span
+                            class="ml-auto align-self-center badge badge-secondary badge-pill" id='SDR'>25%</span></a>
+                    </li>
+                </ul>
+            </div>
+<!--            <div class="small mb-2" id='LUD'>?</div>-->
+            <br>
+            <div class="mb-4">
+                <div class="small mb-3"><strong>Helpful Links</strong></div>
+                <ul class="nav flex-column nav-pills">
+                    <li class="nav-item"><a
+                            href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/different-vaccines.html"
+                            target="_blank" class="d-flex nav-link"><i
+                            class="fa fa-fw fa-arrow-right align-self-center mr-2"></i>Vaccine Types</a></li>
+                    <li class="nav-item"><a
+                            href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/different-vaccines/how-they-work.html"
+                            target="_blank" class="d-flex nav-link"><i
+                            class="fa fa-fw fa-arrow-right align-self-center mr-2"></i>How Vaccines Work</a></li>
+                    <li class="nav-item"><a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/expect.html"
+                                            target="_blank" class="d-flex nav-link"><i
+                            class="fa fa-fw fa-arrow-right align-self-center mr-2"></i>Before Your Appointment</a></li>
+                    <li class="nav-item"><a href="https://vaers.hhs.gov/esub/index.jsp" target="_blank"
+                                            class="d-flex nav-link"><i
+                            class="fa fa-fw fa-arrow-right align-self-center mr-2"></i>Report Vaccine Side Effects</a>
+                    </li>
+                </ul>
+            </div>
+            <a class="twitter-timeline" data-width="300" data-height="500" href="https://twitter.com/NJVaxFinder?ref_src=twsrc%5Etfw">Tweets by NJVaxFinder</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <div class="col-lg-9">
+            <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
+                <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <!--                        <li class="active breadcrumb-item" aria-current="page"><a href="/"><i class="fa fa-home"></i></a></li>-->
+                        <li class="active breadcrumb-item" aria-current="page">Showing <strong
+                                id='resultAmount'>X</strong> result(s)
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="mb-3 Card_custom-card--border_5wJKy card rounded">
+                <div class="table-responsive-xl ">
+                    <table class="mb-0 table table-hover" id='myTable'>
+                        <thead>
+                        <tr>
+                            <th class="align-middle bt-0">Name</th>
+                            <th class="align-middle bt-0">Phone</th>
+                            <th class="align-middle bt-0">Website</th>
+                            <th class="align-middle bt-0">Zip Code</th>
+                            <!--                            <th class="align-middle bt-0">Miles</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="align-middle">
+                                <div>CVS Pharmacy</div>
+                            </td>
+                            <td class="align-middle"><span class="badge badge-success badge-pill">1-800-552-8159</span>
+                            </td>
+                            <td class="align-middle">
+                                <div><span><a href="http://www.cvs.com/immunizations/covid-19-vaccine"
+                                              target="_blank"><span class="badge badge-info  badge-pill"
+                                                                    style="font-size: small">Website <i
+                                        class="fa fa-external-link"></i></span></a></span></div>
+                            </td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <div>ShopRite</div>
+                            </td>
+                            <td class="align-middle"><span class="badge badge-success badge-pill">1-800-746-7748</span>
+                            </td>
+                            <td class="align-middle">
+                                <div><span><a href="https://vaccines.shoprite.com" target="_blank"><span
+                                        class="badge badge-info  badge-pill" style="font-size: small">Website <i
+                                        class="fa fa-external-link"></i></span></a></span></div>
+                            </td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <div>RiteAid</div>
+                            </td>
+                            <td class="align-middle"><span class="badge badge-success badge-pill">1-800-748-3242</span>
+                            </td>
+                            <td class="align-middle">
+                                <div><span><a href="http://www.riteaid.com" target="_blank"><span
+                                        class="badge badge-info  badge-pill" style="font-size: small">Website <i
+                                        class="fa fa-external-link"></i></span></a></span></div>
+                            </td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <div>Wegmans Pharmacy</div>
+                            </td>
+                            <td class="align-middle"><span class="badge badge-success badge-pill">1-800-207-6099</span>
+                            </td>
+                            <td class="align-middle">
+                                <div><span><a href="https://www.wegmans.com/covid-vaccine/registration/"
+                                              target="_blank"><span class="badge badge-info  badge-pill"
+                                                                    style="font-size: small">Website <i
+                                        class="fa fa-external-link"></i></span></a></span></div>
+                            </td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <div>Walgreens</div>
+                            </td>
+                            <td class="align-middle"><span class="badge badge-success badge-pill">1-800-925-4733</span>
+                            </td>
+                            <td class="align-middle">
+                                <div><span><a
+                                        href="https://www.walgreens.com/findcare/vaccination/covid-19/location-screening"
+                                        target="_blank"><span class="badge badge-info  badge-pill"
+                                                              style="font-size: small">Website <i
+                                        class="fa fa-external-link"></i></span></a></span></div>
+                            </td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <div>Walmart Pharmacy</div>
+                            </td>
+                            <td class="align-middle"><span class="badge badge-success badge-pill">1-800-925-6278</span>
+                            </td>
+                            <td class="align-middle">
+                                <div><span><a href="https://www.walmart.com/cp/1228302" target="_blank"><span
+                                        class="badge badge-info  badge-pill" style="font-size: small">Website <i
+                                        class="fa fa-external-link"></i></span></a></span></div>
+                            </td>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--        Map-->
+            <div id='mapDiv'>
+                <!--            AIzaSyClhA3qUFMc0FNXJWAxxuE7vzEWDsjqu2A-->
+                <script
+                        src="REDACTED"
+                        async
+                ></script>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    getVaccineData()
+    var input = document.getElementById("searchForm");
+    input.addEventListener("keyup", function (event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("searchButton").click();
+        }
+    });
+</script>
+<br>
+<div class="w3-bar w3-light-gray">
+    <p></p>
+</div>
+<div class="w3-bar w3-dark-gray">
+    <div class="w3-bar-item">
+        <a href="mailto:dchoudhri22@lawrenceville.org">Contact Us</a>
+    </div>
+    <div class="w3-bar-item">
+        <!--        <p>Website developed and designed by Dhillon Choudhri and Shaan Choudhri</p>-->
+        <p>About Us</p>
+    </div>
+    <div class="w3-bar-item">
+        <p>Follow our socials:</p>
+        <a href="https://twitter.com/NJVaxFinder" target="_blank">
+            <img src="https://www.alc.edu/wp-content/uploads/2016/10/13-twitter-logo-vector-png-free-cliparts-that-you-can-download-to-you-Km878c-clipart.png"
+            style="width: 50px; height: 50px" alt="Twitter"></a>
+        <a href="https://www.facebook.com/njvaxfinder.nj" target="_blank">
+            <img src="https://1000logos.net/wp-content/uploads/2016/11/Facebook-logo.png"
+                 style="width: 50px; height: 50px" alt="Facebook">
+        </a>
+    </div>
+    <div class="w3-bar-item">
+        <p>What they're saying:</p>
+        <a href="https://www.nj.com/coronavirus/2021/03/nj-teens-saw-grandparents-struggle-to-book-vaccine-appointments-so-they-launched-a-site-to-help.html" target="_blank">
+            NJ.com</a>
+        <a href="https://patch.com/new-jersey/lawrenceville/grandparents-vaccine-plight-prompts-nj-teens-build-website" target="_blank">
+           The Patch
+        </a>
+        <a href="https://centraljersey.com/2021/03/31/lawrenceville-school-students-create-website-to-navigate-covid-19-vaccine-appointments/" target="_blank">
+            The Lawrence Ledger
+        </a>
+    </div>
+    <div class="w3-bar-item" style="position: absolute; right:100px">
+        <p>Powered by:</p>
+        <a href="https://www.digitalocean.com/" target="_blank"><img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/DigitalOcean_logo.svg/1200px-DigitalOcean_logo.svg.png"
+                style="width: 50px; height: 50px" alt="Digital Ocean"></a>
+        <a href="http://www.python.org" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/768px-Python-logo-notext.svg.png"
+                 alt="Python" style="width: 50px; height: 50px">
+        </a>
+        <a href="http://www.jetbrains.com/webstorm" target="_blank">
+            <img src="https://resources.jetbrains.com/storage/products/webstorm/img/meta/webstorm_logo_300x300.png"
+                 alt="WebStorm" style="height: 50px; width: 50px">
+        </a>
+        <a href="http://nodejs.org" target="_blank">
+            <img src="https://cdn.pixabay.com/photo/2015/04/23/17/41/node-js-736399_960_720.png"
+                 alt="NodeJs" style="width: 80px; height: 80px">
+        </a>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+</body>
+</html>
